@@ -114,8 +114,18 @@
                 $bonusData = $bonusResult->fetch_assoc();
                 $totalBonus = $bonusData['TotalBonus'] ?? 0;
 
-                // Calculate total salary after advances and including bonus
-                $totalSalary = $monthlySalary - $totalAdvance + $totalBonus;
+                // Fetch EPF amount for the current cycle
+                $stmtEpf = $conn->prepare("SELECT EPFAmount 
+                                            FROM epf 
+                                            WHERE EmpID = ? AND DateCalculated = CURDATE()");
+                $stmtEpf->bind_param("i", $empID);
+                $stmtEpf->execute();
+                $epfResult = $stmtEpf->get_result();
+                $epfData = $epfResult->fetch_assoc();
+                $epfAmount = $epfData['EPFAmount'] ?? 0;
+
+                // Calculate total salary after advances, including bonus, and deducting EPF
+                $totalSalary = $monthlySalary - $totalAdvance + $totalBonus - $epfAmount;
 
                 echo "<div class='result'>
                         <h3>Salary Calculation for $name</h3>
@@ -124,7 +134,8 @@
                         <p>Monthly Salary: Rs.$monthlySalary</p>
                         <p>Salary Advance: Rs.$totalAdvance</p>
                         <p>Bonus: Rs.$totalBonus</p>
-                        <p>Total Salary after Advances and Including Bonus: Rs.$totalSalary</p>
+                        <p>EPF Deduction: Rs.$epfAmount</p>
+                        <p>Total Salary after Advances, Bonus, and EPF: Rs.$totalSalary</p>
                       </div>";
             } else {
                 echo "<div class='result'>No attendance records found for the selected employee in this cycle.</div>";
@@ -133,6 +144,7 @@
             $stmt->close();
             $stmtAdvance->close();
             $stmtBonus->close();
+            $stmtEpf->close();
         }
 
         // Close the connection

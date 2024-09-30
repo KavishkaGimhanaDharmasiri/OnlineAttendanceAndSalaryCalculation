@@ -104,18 +104,7 @@
                 $advanceData = $advanceResult->fetch_assoc();
                 $totalAdvance = $advanceData['TotalAdvance'] ?? 0;
 
-                // Fetch bonus amount for the current cycle
-                $stmtBonus = $conn->prepare("SELECT SUM(Amount) as TotalBonus 
-                                              FROM bonus 
-                                              WHERE EmpID = ? AND Date BETWEEN ? AND ?");
-                $stmtBonus->bind_param("iss", $empID, $startDate, $endDate);
-                $stmtBonus->execute();
-                $bonusResult = $stmtBonus->get_result();
-                $bonusData = $bonusResult->fetch_assoc();
-                $totalBonus = $bonusData['TotalBonus'] ?? 0;
-
-                // Calculate total salary after advances and including bonus
-                $totalSalary = $monthlySalary - $totalAdvance + $totalBonus;
+                $totalSalary = $monthlySalary - $totalAdvance;
 
                 echo "<div class='result'>
                         <h3>Salary Calculation for $name</h3>
@@ -123,8 +112,7 @@
                         <p>Present Days: $presentDays</p>
                         <p>Monthly Salary: Rs.$monthlySalary</p>
                         <p>Salary Advance: Rs.$totalAdvance</p>
-                        <p>Bonus: Rs.$totalBonus</p>
-                        <p>Total Salary after Advances and Including Bonus: Rs.$totalSalary</p>
+                        <p>Total Salary after Advances: Rs.$totalSalary</p>
                       </div>";
             } else {
                 echo "<div class='result'>No attendance records found for the selected employee in this cycle.</div>";
@@ -132,19 +120,18 @@
 
             $stmt->close();
             $stmtAdvance->close();
-            $stmtBonus->close();
         }
 
         // Close the connection
         $conn->close();
         ?>
         <?php if ($_SERVER["REQUEST_METHOD"] == "POST"): ?>
-            <button onclick="printPaysheet()">Print Pay Sheet</button>
-            <form action="generate_pdf.php" method="POST" style="margin-top: 10px;">
-                <input type="hidden" name="empID" value="<?php echo htmlspecialchars($empID); ?>">
-                <input type="submit" value="Generate PDF Report">
-            </form>
-        <?php endif; ?>
+    <button onclick="printPaysheet()">Print Pay Sheet</button>
+    <form action="generate_pdf.php" method="POST" style="margin-top: 10px;">
+        <input type="hidden" name="empID" value="<?php echo htmlspecialchars($empID); ?>">
+        <input type="submit" value="Generate PDF Report">
+    </form>
+<?php endif; ?>
 
     </div>
 </body>

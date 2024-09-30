@@ -29,6 +29,16 @@ CREATE TABLE IF NOT EXISTS `attendance` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table emp.bonus
+CREATE TABLE IF NOT EXISTS `bonus` (
+  `EmpID` int DEFAULT NULL,
+  `Name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Amount` int DEFAULT NULL,
+  `Date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table emp.employee
 CREATE TABLE IF NOT EXISTS `employee` (
   `EmpID` int NOT NULL AUTO_INCREMENT,
@@ -40,6 +50,17 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `Image` blob,
   PRIMARY KEY (`EmpID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table emp.epf
+CREATE TABLE IF NOT EXISTS `epf` (
+  `EmpID` int NOT NULL,
+  `BasicSalary` decimal(10,2) NOT NULL,
+  `EPFAmount` decimal(10,2) NOT NULL,
+  `DateCalculated` date NOT NULL,
+  PRIMARY KEY (`EmpID`,`DateCalculated`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 

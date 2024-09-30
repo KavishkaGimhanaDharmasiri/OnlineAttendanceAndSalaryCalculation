@@ -115,6 +115,14 @@
                 <i class="fas fa-calculator"></i>
                 <span>Calculate Salary</span>
             </a>
+            <a href="Bonus.php" class="nav-item">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Bonus</span>
+            </a>
+            <a href="epf_calculation.php" class="nav-item">
+                <i class="fas fa-calculator"></i>
+                <span>EPF Calculation</span>
+            </a>
             <a href="reports.php" class="nav-item">
                 <i class="fas fa-chart-bar"></i>
                 <span>Reports</span>
